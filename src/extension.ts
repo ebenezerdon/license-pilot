@@ -1,26 +1,88 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from 'vscode'
+import * as https from 'https'
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+const fetchLicenses = async (): Promise<{ key: string; name: string }[]> => {
+  return new Promise((resolve, reject) => {
+    https
+      .get('https://api.github.com/licenses', { headers: { 'User-Agent': 'VSCode License Extension' } }, (res) => {
+        if (res.statusCode !== 200) {
+          reject(new Error(`Request failed with status code: ${res.statusCode}`))
+          return
+        }
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "license-pilot" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('license-pilot.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from License Pilot!');
-	});
-
-	context.subscriptions.push(disposable);
+        let data = ''
+        res.on('data', (chunk) => (data += chunk))
+        res.on('end', () => {
+          try {
+            resolve(JSON.parse(data))
+          } catch (error) {
+            reject(new Error('Failed to parse JSON response'))
+          }
+        })
+      })
+      .on('error', reject)
+  })
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+const fetchLicenseContent = async (key: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    https
+      .get(
+        `https://api.github.com/licenses/${key}`,
+        { headers: { 'User-Agent': 'VSCode License Extension' } },
+        (res) => {
+          if (res.statusCode !== 200) {
+            reject(new Error(`Request failed with status code: ${res.statusCode}`))
+            return
+          }
+
+          let data = ''
+          res.on('data', (chunk) => (data += chunk))
+          res.on('end', () => {
+            try {
+              const license = JSON.parse(data)
+              resolve(license.body)
+            } catch (error) {
+              reject(new Error('Failed to parse JSON response'))
+            }
+          })
+        },
+      )
+      .on('error', reject)
+  })
+}
+
+function activate(context: vscode.ExtensionContext) {
+  let disposable = vscode.commands.registerCommand('extension.addLicense', async () => {
+    try {
+      const licenses = await fetchLicenses()
+      const pickItems = licenses.map((license) => ({ label: license.name, description: license.key }))
+
+      const selected = await vscode.window.showQuickPick(pickItems, { placeHolder: 'Choose a license' })
+
+      if (selected) {
+        const licenseContent = await fetchLicenseContent(selected.description)
+        const workspaceFolders = vscode.workspace.workspaceFolders
+
+        if (workspaceFolders && workspaceFolders.length > 0) {
+          const licenseFilePath = vscode.Uri.joinPath(workspaceFolders[0].uri, 'LICENSE')
+          await vscode.workspace.fs.writeFile(licenseFilePath, Buffer.from(licenseContent, 'utf8'))
+          vscode.window.showInformationMessage(`License ${selected.label} added to your project.`)
+        } else {
+          vscode.window.showErrorMessage('No open workspace found.')
+        }
+      }
+    } catch (error) {
+      vscode.window.showErrorMessage(`Error: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  })
+
+  context.subscriptions.push(disposable)
+}
+
+function deactivate() {}
+
+module.exports = {
+  activate,
+  deactivate,
+}

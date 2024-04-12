@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as https from 'https'
 
-// Helper function to perform HTTPS GET requests
+/* Helper function to perform HTTPS GET requests */
 const httpsGet = (
   url: string,
   options: https.RequestOptions,
@@ -17,7 +17,7 @@ const httpsGet = (
   })
 }
 
-// Fetches licenses from GitHub API
+/* Fetches licenses from GitHub API */
 const fetchLicenses = async (): Promise<Array<{ key: string; name: string }>> => {
   const options = { headers: { 'User-Agent': 'VSCode License Extension' } }
   const { statusCode, body } = await httpsGet('https://api.github.com/licenses', options)
@@ -33,7 +33,7 @@ const fetchLicenses = async (): Promise<Array<{ key: string; name: string }>> =>
   }
 }
 
-// Fetches specific license content
+/* Fetches specific license content */
 const fetchLicenseContent = async (key: string): Promise<string> => {
   const options = { headers: { 'User-Agent': 'VSCode License Extension' } }
   const { statusCode, body } = await httpsGet(`https://api.github.com/licenses/${key}`, options)
@@ -50,10 +50,9 @@ const fetchLicenseContent = async (key: string): Promise<string> => {
   }
 }
 
-// Check if the LICENSE file exists and prompt the user for action if it does
+/* Check if the LICENSE file exists and prompt the user for action if it does */
 const checkAndWriteLicenseFile = async (licenseFilePath: vscode.Uri, licenseContent: string): Promise<void> => {
   try {
-    // Check if the LICENSE file exists
     const fileExists = await vscode.workspace.fs.stat(licenseFilePath).then(
       () => true,
       () => false,
@@ -72,7 +71,7 @@ const checkAndWriteLicenseFile = async (licenseFilePath: vscode.Uri, licenseCont
       }
     }
 
-    // Write the LICENSE file
+    /* Write the LICENSE file */
     await vscode.workspace.fs.writeFile(licenseFilePath, Buffer.from(licenseContent, 'utf8'))
     vscode.window.showInformationMessage('License file added to your project.')
   } catch (error) {
@@ -80,7 +79,7 @@ const checkAndWriteLicenseFile = async (licenseFilePath: vscode.Uri, licenseCont
   }
 }
 
-// Activate function - registers the command and handles the logic
+/* Activate function - registers the command and handles the logic */
 export function activate(context: vscode.ExtensionContext): void {
   let disposable = vscode.commands.registerCommand('extension.addLicense', async () => {
     try {

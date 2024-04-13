@@ -4,6 +4,7 @@
   "description": "Quickly generate and add the right license to your project with just a few clicks. Simple, fast, and reliable.",
   "version": "0.0.1",
   "publisher": "EbenezerDon",
+  "icon": "src/assets/logo.png",
   "engines": {
     "vscode": "^1.88.0"
   },

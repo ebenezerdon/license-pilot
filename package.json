@@ -2,9 +2,9 @@
   "name": "license-pilot",
   "displayName": "License Pilot",
   "description": "Quickly generate and add the right license to your project with just a few clicks. Simple, fast, and reliable.",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "publisher": "EbenezerDon",
-  "icon": "src/assets/logo.webp",
+  "icon": "assets/logo.webp",
   "engines": {
     "vscode": "^1.88.0"
   },

@@ -4,6 +4,6 @@ node_modules
 .vscode-test/
 *.vsix
 .history
-src/assets/logo1.webp
-src/assets/logo2.webp
-src/assets/logo3.webp
+assets/logo1.webp
+assets/logo2.webp
+assets/logo3.webp

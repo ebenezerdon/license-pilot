@@ -6,7 +6,7 @@
   "publisher": "EbenezerDon",
   "icon": "assets/logo.png",
   "engines": {
-    "vscode": "^1.40.0"
+    "vscode": "^1.6.0"
   },
   "repository": {
     "type": "git",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
-    "@types/vscode": "^1.88.0",
+    "@types/vscode": "^1.6.0",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "@vscode/test-cli": "^0.0.8",

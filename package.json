@@ -30,14 +30,12 @@
     "legal",
     "compliance"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:extension.addLicense"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "license-pilot.helloWorld",
-        "title": "Hello World"
-      },
       {
         "command": "extension.addLicense",
         "title": "Add a License"

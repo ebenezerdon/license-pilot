@@ -30,3 +30,7 @@ License-Pilot works out of the box and does not require any additional settings.
 ## Known Issues
 
 Currently, there are no reported issues. If something comes up, please [file an issue](https://github.com/ebenezerdon/license-pilot) or reach out to me on [LinkedIn](https://linkedin.com/in/ebenezerdon).
+
+## Please leave a star ⭐️
+
+Please consider leaving a star on the [GitHub repository](https://github.com/ebenezerdon/license-pilot) if you find this extension helpful. It helps others discover the extension and encourages me to keep improving it. Thank you!

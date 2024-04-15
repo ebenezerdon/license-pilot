@@ -6,7 +6,7 @@
   "publisher": "EbenezerDon",
   "icon": "assets/logo.png",
   "engines": {
-    "vscode": "^1.88.0"
+    "vscode": "^1.40.0"
   },
   "repository": {
     "type": "git",

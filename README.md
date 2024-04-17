@@ -19,6 +19,10 @@ Follow the prompts to select and add a license.
 
 **Prompts for file overwrite**: If a license file already exists in your project, "license-pilot" will prompt you to confirm before overwriting it.
 
+## Installation
+
+Simply search for "License Pilot" in your VSCode Extensions view or the VSCode Marketplace and click Install. You can also download the extension from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=ebenezerdon.license-pilot).
+
 ## Requirements
 
 License-Pilot is straightforward with no extra dependencies. Just install and start using!

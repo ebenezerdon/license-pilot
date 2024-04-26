@@ -2,7 +2,7 @@
   "name": "license-pilot",
   "displayName": "License Pilot",
   "description": "Quickly generate and add the right license to your project with just a few clicks. Simple, fast, and reliable.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "publisher": "EbenezerDon",
   "icon": "assets/logo.png",
   "engines": {

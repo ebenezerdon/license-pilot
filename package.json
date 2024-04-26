@@ -66,5 +66,8 @@
     "typescript": "^5.3.3",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@ebenezerdon/ts-node-cache": "^1.0.11"
   }
 }

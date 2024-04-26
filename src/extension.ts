@@ -1,5 +1,8 @@
 import * as vscode from 'vscode'
 import * as https from 'https'
+import { Cache } from '@ebenezerdon/ts-node-cache'
+
+const cache = new Cache()
 
 /* Helper function to perform HTTPS GET requests */
 const httpsGet = (
@@ -17,8 +20,14 @@ const httpsGet = (
   })
 }
 
-/* Fetches licenses from GitHub API */
+/* Fetches licenses from GitHub API using cache */
 const fetchLicenses = async (): Promise<Array<{ key: string; name: string }>> => {
+  const cacheKey = 'github-licenses'
+  const cachedData = cache.get(cacheKey)
+  if (cachedData) {
+    return cachedData as Array<{ key: string; name: string }>
+  }
+
   const options = { headers: { 'User-Agent': 'VSCode License Extension' } }
   const { statusCode, body } = await httpsGet('https://api.github.com/licenses', options)
 
@@ -27,14 +36,22 @@ const fetchLicenses = async (): Promise<Array<{ key: string; name: string }>> =>
   }
 
   try {
-    return JSON.parse(body)
+    const data = JSON.parse(body)
+    cache.put(cacheKey, data, 3600) // cache for 1 hour
+    return data
   } catch (error) {
     throw new Error('Failed to parse JSON response for licenses')
   }
 }
 
-/* Fetches specific license content */
+/* Fetches specific license content using cache */
 const fetchLicenseContent = async (key: string): Promise<string> => {
+  const cacheKey = `license-content-${key}`
+  const cachedContent = cache.get(cacheKey)
+  if (cachedContent) {
+    return cachedContent as string
+  }
+
   const options = { headers: { 'User-Agent': 'VSCode License Extension' } }
   const { statusCode, body } = await httpsGet(`https://api.github.com/licenses/${key}`, options)
 
@@ -43,8 +60,9 @@ const fetchLicenseContent = async (key: string): Promise<string> => {
   }
 
   try {
-    const content = JSON.parse(body)
-    return content.body
+    const content = JSON.parse(body).body
+    cache.put(cacheKey, content, 3600) // cache for 1 hour
+    return content
   } catch (error) {
     throw new Error('Failed to parse JSON response for license content')
   }
